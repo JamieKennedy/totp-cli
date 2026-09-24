@@ -1,0 +1,29 @@
+version: "2"
+
+linters:
+  enable:
+    - gosec
+    - misspell
+    - unconvert
+    - bodyclose
+  settings:
+    errcheck:
+      exclude-functions:
+        - os.Remove
+        - (*os.File).Close
+  exclusions:
+    presets:
+      - std-error-handling
+    rules:
+      # Test fixtures deliberately contain example TOTP secrets.
+      - path: _test\.go
+        linters: [gosec]
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/JamieKennedy/totp-cli
