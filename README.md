@@ -48,7 +48,26 @@ Get-Clipboard | totp add github --url -
 Get-Clipboard | totp add staging --secret - --issuer ACME --digits 8 --period 60 --algorithm SHA256
 ```
 
-If you don't give a name, one is suggested from the issuer or account label. Secrets passed directly as `--url <value>` or `--secret <value>` work, but they print a warning because the value ends up in your shell history.
+To add a TOTP in one command, give the name followed by `--url` (or `--secret`) and the value:
+
+```powershell
+totp add github --url "otpauth://totp/GitHub:you@example.com?secret=JBSWY3DPEHPK3PXP&issuer=GitHub"
+totp add staging --secret JBSWY3DPEHPK3PXP --issuer ACME
+```
+
+This works, but it prints a warning because the secret ends up in your shell history. Pass `-` instead of the value to read it from stdin, as in the examples above.
+
+| Flag | Description |
+| --- | --- |
+| `-u`, `--url` | `otpauth://totp/...` URL, or `-` to read it from stdin |
+| `-s`, `--secret` | Base32 secret, or `-` to read it from stdin |
+| `--issuer` | Issuer, e.g. `GitHub` (overrides the URL's issuer) |
+| `--account` | Account label, e.g. `you@example.com` (overrides the URL's account) |
+| `--algorithm` | `SHA1` (default), `SHA256` or `SHA512` |
+| `--digits` | Code length, 6–8 (default 6) |
+| `--period` | Seconds each code is valid for (default 30) |
+
+`--url` can't be combined with `--secret`, `--algorithm`, `--digits` or `--period`, because the URL already sets them. If you don't give a name, one is suggested from the issuer or account label.
 
 ### List TOTPs
 
